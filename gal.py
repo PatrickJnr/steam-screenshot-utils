@@ -8,6 +8,8 @@ def natural_sort_key(s):
         int(text) if text.isdigit() else text.lower()
         for text in re.split("([0-9]+)", s)
     ]
+
+
 def generate_html_gallery(html_file_path, root_folder="output"):
     supported_extensions = (".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp")
     images_by_category = {}

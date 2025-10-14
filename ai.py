@@ -12,7 +12,7 @@ def scan_directory(directory, extensions):
 
 def generate_html_gallery(directory):
     # Get the list of image files in the directory and its subdirectories
-    image_files = scan_directory(directory, ('.png', '.jpg', '.jpeg'))
+    image_files = scan_directory(directory, (".png", ".jpg", ".jpeg"))
 
     if not image_files:
         print("No image files found in the directory.")
@@ -43,7 +43,7 @@ def generate_html_gallery(directory):
 """
 
     for game, files in games.items():
-        html += f'<h2>{game}</h2>\n'
+        html += f"<h2>{game}</h2>\n"
         html += '<div class="row">\n'
         for i, file in enumerate(files):
             html += '<div class="col-md-4 gallery-item">'
@@ -53,12 +53,12 @@ def generate_html_gallery(directory):
             html += '<div class="modal-content">'
             html += '<div class="modal-body">'
             html += f'<img src="{file}" alt="{os.path.basename(file)}" style="width: 100%; height: auto;" />\n'  # Set width: 100%
-            html += '</div>'
-            html += '</div>'
-            html += '</div>'
-            html += '</div>'
-            html += '</div>\n'
-        html += '</div>\n'
+            html += "</div>"
+            html += "</div>"
+            html += "</div>"
+            html += "</div>"
+            html += "</div>\n"
+        html += "</div>\n"
 
     html += """</div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

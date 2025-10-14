@@ -100,7 +100,7 @@ def sanitize_app_name(name):
     if platform.system() == "Windows":
         return re.sub(r'[<>:"/\\|?*]', "", name)
     else:
-        
+
         return re.sub(r"[/]", "", name)
 
 
@@ -197,7 +197,7 @@ def sort(screenshots_folder):
 
 
 def merge(compressed_folder, uncompressed_folder):
-    
+
     if not os.path.exists(compressed_folder):
         print(f"Could not find the compressed screenshots folder: {compressed_folder}")
         sys.exit(1)
