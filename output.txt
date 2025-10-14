@@ -1,3 +1,0 @@
-An unexpected error occurred: 'charmap' codec can't encode character '\u0394' in position 42: character maps to <undefined>
-Loading appid names from local cache...
-Skipping invalid appid file: 13679705716670070784_20250721093600_1.png
