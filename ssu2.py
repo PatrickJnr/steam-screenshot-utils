@@ -59,7 +59,14 @@ class Config:
     DEFAULT_OUTPUT_FOLDER: str = "backup"
     STEAM_SCREENSHOTS_SUBDIR: str = "760"
     STEAM_API_ENDPOINT: str = "https://api.steampowered.com/ISteamApps/GetAppList/v0002"
-    SUPPORTED_EXTENSIONS: Tuple[str, ...] = (".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp")
+    SUPPORTED_EXTENSIONS: Tuple[str, ...] = (
+        ".png",
+        ".jpg",
+        ".jpeg",
+        ".gif",
+        ".bmp",
+        ".webp",
+    )
     MAX_APPID_VALUE: int = 2147483647  # Max 32-bit signed integer
 
 
@@ -148,8 +155,12 @@ class AppIdConverter:
 
             except requests.exceptions.RequestException as e:
                 if attempt == max_retries - 1:
-                    raise AppIdError(f"Failed to download app data after {max_retries} attempts: {e}")
-                self.logger.warning(f"Attempt {attempt + 1} failed: {e}. Retrying in {retry_delay}s...")
+                    raise AppIdError(
+                        f"Failed to download app data after {max_retries} attempts: {e}"
+                    )
+                self.logger.warning(
+                    f"Attempt {attempt + 1} failed: {e}. Retrying in {retry_delay}s..."
+                )
                 time.sleep(retry_delay)
                 retry_delay *= 2
 
@@ -159,11 +170,11 @@ class AppIdConverter:
     def _validate_api_response(self, app_data: dict) -> bool:
         """Validate the structure of API response."""
         return (
-            isinstance(app_data, dict) and
-            "applist" in app_data and
-            isinstance(app_data["applist"], dict) and
-            "apps" in app_data["applist"] and
-            isinstance(app_data["applist"]["apps"], list)
+            isinstance(app_data, dict)
+            and "applist" in app_data
+            and isinstance(app_data["applist"], dict)
+            and "apps" in app_data["applist"]
+            and isinstance(app_data["applist"]["apps"], list)
         )
 
     def _load_appid_names(self) -> None:
@@ -230,7 +241,7 @@ class FileManager:
         else:
             invalid_chars = "/"
 
-        sanitized = re.sub(f'[{re.escape(invalid_chars)}]', "", name)
+        sanitized = re.sub(f"[{re.escape(invalid_chars)}]", "", name)
 
         # Also remove control characters
         sanitized = re.sub(r"[\x00-\x1f\x7f-\x9f]", "", sanitized)
@@ -313,7 +324,9 @@ class SteamScreenshotManager:
     ) -> Dict[str, int]:
         """Backup Steam screenshots organized by app name."""
         steam_user_folder = Path(steam_user_folder)
-        screenshots_root = steam_user_folder / Config.STEAM_SCREENSHOTS_SUBDIR / "remote"
+        screenshots_root = (
+            steam_user_folder / Config.STEAM_SCREENSHOTS_SUBDIR / "remote"
+        )
 
         if not screenshots_root.exists():
             raise ValidationError(f"Screenshots folder not found: {screenshots_root}")
@@ -337,7 +350,9 @@ class SteamScreenshotManager:
                 stats["apps"] += 1
                 app_name = self.appid_converter.get_app_name(appid)
                 sanitized_name = self.file_manager.sanitize_filename(app_name)
-                app_folder = self.file_manager.create_directory(output_folder / sanitized_name)
+                app_folder = self.file_manager.create_directory(
+                    output_folder / sanitized_name
+                )
 
                 screenshots_dir = appid_dir / "screenshots"
                 if not screenshots_dir.exists():
@@ -348,7 +363,9 @@ class SteamScreenshotManager:
                     dest_path = app_folder / screenshot.name
 
                     if dry_run:
-                        tracker.log_progress(f"[DRY RUN] Would copy: {screenshot} -> {dest_path}")
+                        tracker.log_progress(
+                            f"[DRY RUN] Would copy: {screenshot} -> {dest_path}"
+                        )
                         copied_count += 1
                         stats["bytes"] += self.file_manager.get_file_size(screenshot)
                     elif not dest_path.exists():
@@ -360,7 +377,9 @@ class SteamScreenshotManager:
                             self.logger.error(f"Failed to copy {screenshot}: {e}")
 
                 if copied_count > 0:
-                    tracker.log_progress(f"Copied {copied_count} screenshots for {app_name}")
+                    tracker.log_progress(
+                        f"Copied {copied_count} screenshots for {app_name}"
+                    )
                 stats["screenshots"] += copied_count
 
         return stats
@@ -397,14 +416,18 @@ class SteamScreenshotManager:
                 stats["apps"] += 1
                 app_name = self.appid_converter.get_app_name(appid)
                 sanitized_name = self.file_manager.sanitize_filename(app_name)
-                app_folder = self.file_manager.create_directory(screenshots_folder / sanitized_name)
+                app_folder = self.file_manager.create_directory(
+                    screenshots_folder / sanitized_name
+                )
 
                 moved_count = 0
                 for screenshot in screenshots:
                     dest_path = app_folder / screenshot.name
 
                     if dry_run:
-                        tracker.log_progress(f"[DRY RUN] Would move: {screenshot} -> {dest_path}")
+                        tracker.log_progress(
+                            f"[DRY RUN] Would move: {screenshot} -> {dest_path}"
+                        )
                         moved_count += 1
                     else:
                         try:
@@ -414,7 +437,9 @@ class SteamScreenshotManager:
                             self.logger.error(f"Failed to move {screenshot}: {e}")
 
                 if moved_count > 0:
-                    tracker.log_progress(f"Moved {moved_count} screenshots for {app_name}")
+                    tracker.log_progress(
+                        f"Moved {moved_count} screenshots for {app_name}"
+                    )
                 stats["screenshots"] += moved_count
 
         return stats
@@ -443,7 +468,9 @@ class SteamScreenshotManager:
                 dest_app_dir = uncompressed_folder / app_dir.name
 
                 if not dest_app_dir.exists():
-                    self.logger.warning(f"App folder {app_dir.name} does not exist in uncompressed directory")
+                    self.logger.warning(
+                        f"App folder {app_dir.name} does not exist in uncompressed directory"
+                    )
                     continue
 
                 self.file_manager.create_directory(dest_app_dir, exist_ok=True)
@@ -459,7 +486,9 @@ class SteamScreenshotManager:
                         dest_path = dest_app_dir / screenshot.name
 
                         if dry_run:
-                            tracker.log_progress(f"[DRY RUN] Would copy: {screenshot} -> {dest_path}")
+                            tracker.log_progress(
+                                f"[DRY RUN] Would copy: {screenshot} -> {dest_path}"
+                            )
                             added_count += 1
                         else:
                             try:
@@ -469,7 +498,9 @@ class SteamScreenshotManager:
                                 self.logger.error(f"Failed to copy {screenshot}: {e}")
 
                 if added_count > 0:
-                    tracker.log_progress(f"Added {added_count} screenshots for {app_dir.name}")
+                    tracker.log_progress(
+                        f"Added {added_count} screenshots for {app_dir.name}"
+                    )
                 stats["screenshots"] += added_count
 
         return stats
@@ -508,18 +539,24 @@ class SteamScreenshotManager:
 
                 if new_path.exists() and not force:
                     stats["skipped_exists"] += 1
-                    tracker.log_progress(f"Skipping {appid}: Destination exists ({sanitized_name})")
+                    tracker.log_progress(
+                        f"Skipping {appid}: Destination exists ({sanitized_name})"
+                    )
                     continue
 
                 if dry_run:
                     action = "OVERWRITE" if new_path.exists() else "rename"
-                    tracker.log_progress(f"[DRY RUN] Would {action}: {appid} -> {sanitized_name}")
+                    tracker.log_progress(
+                        f"[DRY RUN] Would {action}: {appid} -> {sanitized_name}"
+                    )
                     stats["renamed"] += 1
                 else:
                     try:
                         if new_path.exists():
                             if force:
-                                self.logger.warning(f"Removing existing folder: {new_path}")
+                                self.logger.warning(
+                                    f"Removing existing folder: {new_path}"
+                                )
                                 shutil.rmtree(new_path)
                             else:
                                 continue
@@ -579,7 +616,14 @@ class GalleryGenerator:
         images_by_category = {}
 
         for root in screenshots_dir.rglob("*"):
-            if root.is_file() and root.suffix.lower() in [".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp"]:
+            if root.is_file() and root.suffix.lower() in [
+                ".png",
+                ".jpg",
+                ".jpeg",
+                ".gif",
+                ".bmp",
+                ".webp",
+            ]:
                 category_name = root.parent.name
                 if category_name not in images_by_category:
                     images_by_category[category_name] = []
@@ -587,18 +631,23 @@ class GalleryGenerator:
 
         # Sort images within each category
         for category in images_by_category:
-            images_by_category[category] = self._sort_images(images_by_category[category])
+            images_by_category[category] = self._sort_images(
+                images_by_category[category]
+            )
 
         # Sort categories
         sorted_categories = sorted(
             images_by_category.keys(),
-            key=lambda k: (not k[0].isalpha(), self._natural_sort_key(k))
+            key=lambda k: (not k[0].isalpha(), self._natural_sort_key(k)),
         )
 
-        return {k: images_by_category[k] for k in sorted_categories if images_by_category[k]}
+        return {
+            k: images_by_category[k] for k in sorted_categories if images_by_category[k]
+        }
 
     def _sort_images(self, images: List[Path]) -> List[Path]:
         """Sort images using natural sort order."""
+
         def sort_key(path: Path) -> List[Union[int, str]]:
             name = path.stem
             return [
@@ -619,7 +668,9 @@ class GalleryGenerator:
             for text in re.split(r"(\d+)", s)
         ]
 
-    def _generate_html_content(self, images_by_category: Dict[str, List[Path]], output_html: Path) -> str:
+    def _generate_html_content(
+        self, images_by_category: Dict[str, List[Path]], output_html: Path
+    ) -> str:
         """Generate the complete HTML content."""
         # Enhanced HTML template with modern features
         html_template = """
@@ -1054,12 +1105,16 @@ def main():
                 dry_run,
             )
             if not quiet:
-                logger.info(f"Backup completed: {stats['screenshots']} screenshots from {stats['apps']} apps ({stats['bytes'] / 1024 / 1024:.1f} MB)")
+                logger.info(
+                    f"Backup completed: {stats['screenshots']} screenshots from {stats['apps']} apps ({stats['bytes'] / 1024 / 1024:.1f} MB)"
+                )
 
         elif arguments["sort"]:
             stats = manager.sort_screenshots(arguments["<screenshots_folder>"], dry_run)
             if not quiet:
-                logger.info(f"Sort completed: {stats['screenshots']} screenshots from {stats['apps']} apps")
+                logger.info(
+                    f"Sort completed: {stats['screenshots']} screenshots from {stats['apps']} apps"
+                )
 
         elif arguments["merge"]:
             stats = manager.merge_screenshots(
@@ -1068,7 +1123,9 @@ def main():
                 dry_run,
             )
             if not quiet:
-                logger.info(f"Merge completed: {stats['screenshots']} screenshots from {stats['apps']} apps")
+                logger.info(
+                    f"Merge completed: {stats['screenshots']} screenshots from {stats['apps']} apps"
+                )
 
         elif arguments["rename"]:
             stats = manager.rename_app_folders(
@@ -1077,11 +1134,15 @@ def main():
                 dry_run,
             )
             if not quiet:
-                logger.info(f"Rename completed: {stats['renamed']} renamed, {stats['skipped_not_found']} skipped (not found), {stats['skipped_exists']} skipped (exists)")
+                logger.info(
+                    f"Rename completed: {stats['renamed']} renamed, {stats['skipped_not_found']} skipped (not found), {stats['skipped_exists']} skipped (exists)"
+                )
 
         elif arguments["update"]:
             # Force update the app cache
-            appid_converter = AppIdConverter(quiet=quiet, force_update=True, logger=logger)
+            appid_converter = AppIdConverter(
+                quiet=quiet, force_update=True, logger=logger
+            )
             if not quiet:
                 logger.info("AppID cache updated successfully")
 
