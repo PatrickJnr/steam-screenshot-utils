@@ -35,6 +35,7 @@ A comprehensive, modernized version of the Steam Screenshot Utils tool with enha
 - Python 3.8+
 - `requests` library
 - `docopt` library
+- `customtkinter` library (for GUI version)
 
 ## 🛠 Installation
 
@@ -75,6 +76,32 @@ python ssu2.py gallery [-d <screenshots_dir>] [-o <output_html>]
 - **Dry Run Mode**: Use `-n/--dry-run` to preview operations without making changes
 - **Force Update**: Use `-u/--update` to force refresh the appid cache
 - **Force Rename**: Use `-f/--force` to overwrite existing folders (dangerous!)
+
+## 🖥️ GUI Version (Work in Progress)
+
+⚠️ **Status: Work in Progress**
+
+A modern graphical interface is currently under development:
+
+```bash
+# Launch GUI (requires customtkinter)
+python ssu_gui.py
+```
+
+**Current Features:**
+- Modern dark theme interface
+- Path selection and management
+- Operation buttons for all major functions
+- Real-time progress tracking
+- Activity logging
+- Persistent configuration
+
+**Planned Features:**
+- Drag-and-drop support
+- Batch operation queues
+- Advanced filtering options
+- Custom themes
+- Export functionality
 
 ## 🎨 Gallery Features
 

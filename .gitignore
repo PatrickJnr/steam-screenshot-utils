@@ -59,6 +59,7 @@ venv.bak/
 
 # Project specific
 appid_names.json
+ssu_config.json
 *.exe
 backup/
 output/
