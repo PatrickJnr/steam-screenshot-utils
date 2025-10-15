@@ -43,30 +43,30 @@ A comprehensive, modernized version of the Steam Screenshot Utils tool with enha
 pip install -r requirements.txt
 ```
 
-2. Run the improved script:
+2. Run the script:
 ```bash
-python ssu2_improved.py --help
+python ssu2.py --help
 ```
 
 ## 📖 Usage
 
-The improved version maintains the same command-line interface as the original:
+The modernized version maintains the same command-line interface as the original:
 
 ```bash
 # Backup Steam screenshots
-python ssu2_improved.py backup <steam_user_folder> [-o <output_folder>]
+python ssu2.py backup <steam_user_folder> [-o <output_folder>]
 
 # Sort screenshots by app name
-python ssu2_improved.py sort <screenshots_folder>
+python ssu2.py sort <screenshots_folder>
 
 # Merge compressed and uncompressed screenshots
-python ssu2_improved.py merge <compressed_folder> <uncompressed_folder>
+python ssu2.py merge <compressed_folder> <uncompressed_folder>
 
 # Rename appid folders to app names
-python ssu2_improved.py rename <screenshots_folder> [-f|--force]
+python ssu2.py rename <screenshots_folder> [-f|--force]
 
 # Generate modern web gallery
-python ssu2_improved.py gallery [-d <screenshots_dir>] [-o <output_html>]
+python ssu2.py gallery [-d <screenshots_dir>] [-o <output_html>]
 ```
 
 ### **New Features & Options**
